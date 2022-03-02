@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import { Routes, Route } from 'react-router-dom'
 
 import HomePage from '/src/containers/HomePage'
-import TestPage from '/src/containers/TestPage'
+import TopicPage from '/src/containers/TopicPage'
 import Header from '/src/components/Header'
 import Footer from '/src/components/Footer'
 
@@ -25,7 +25,7 @@ export default function App() {
 			<Header />
 			<Routes>
 				<Route path="/" element={<HomePage />} />
-      			<Route path="test" element={<TestPage />} />
+      			<Route path="/topic/:id/:slug" element={<TopicPage />} />
 			</Routes>
 			<Footer />
 

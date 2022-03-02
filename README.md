@@ -1,15 +1,9 @@
-# React Boilerplate
-
-This boilerplate contains the basic features needed to start on a fresh react single page application.
+# StackOverflow Search
 
 ## Features
 
-- ~~Routing~~
-	- ~~Route Guards~~
-- ~~Layouts~~
-- ~~Languages~~
-- ~~Store~~
-- ~~React Native~~
+- Search for unanswered questions by tag
+- Auto-complete tags
 
 ## Installation
 
