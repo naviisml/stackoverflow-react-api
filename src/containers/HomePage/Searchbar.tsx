@@ -47,15 +47,20 @@ cursor: pointer;
 	background-color: #F7F7F7;
 }`
 
+const Close = styled.span`
+cursor: pointer;
+color: rgba(255, 255, 255, .5);
+margin-left: 10px;
+
+&:hover {
+	color: rgb(255, 255, 255);
+}`
+
 export default class Searchbar extends React.Component {
 	state = {
 		suggestions: [],
 		tags: [],
 		value: ''
-	}
-
-	componentDidMount() {
-		this.setState({ tags: ['php', 'html'] })
 	}
 
 	/**
@@ -102,9 +107,6 @@ export default class Searchbar extends React.Component {
 	
 		// add a tag
 		this.addTag(this.state.value)
-
-		// execute the search callback
-		this.props.onSearchAction(this.state.tags)
 	}
 
 	/**
@@ -114,12 +116,31 @@ export default class Searchbar extends React.Component {
 		let searchTag = this.state.suggestions.find((tag) => { return tag.name = tagName })
 
 		if (searchTag && !this.state.tags[tagName]) {
+			let tags = [...this.state.tags, tagName]
+
 			this.setState({
-				tags: [...this.state.tags, tagName],
+				tags: tags,
 				value: '',
 				suggestions: [],
 			})
+			
+			// execute the search callback
+			this.props.onSearchAction(tags)
 		}
+	}
+
+	/**
+	 * Remove a tag by the name
+	 */
+	removeTag = (tagName) => {
+		let tags = this.state.tags.filter(function(tag) { 
+			return tag !== tagName
+		})
+
+		this.setState({ tags })
+		
+		// execute the search callback
+		this.props.onSearchAction(tags)
 	}
 
 	/**
@@ -127,30 +148,33 @@ export default class Searchbar extends React.Component {
 	 */
 	render() {
 		return (
-			<div>
-				<form onSubmit={this.handleSubmit}>
+			<Input>
+				<ul>
+					{this.state.tags.map((tag, key) =>
+						<li className="badge badge-primary badge-outline mr-2" key={key}>
+							{tag}
 
-					<Input>
-						<ul>
-							{this.state.tags.map((tag, key) =>
-								<li className="badge badge-primary badge-outline mr-2" key={key}>{tag}</li>
-							)}
-						</ul>
+							<Close onClick={() => this.removeTag(tag)}>
+								x
+							</Close>
+						</li>
+					)}
+				</ul>
 
-						<Search>
-							<input type="text" placeholder="Search for a tag..." value={this.state.value} onChange={this.handleChange} />
+				<Search>
+					<form onSubmit={this.handleSubmit}>
+						<input type="text" placeholder="Search for a tag..." value={this.state.value} onChange={this.handleChange} />
+					</form>
 
-							<Dropdown>
-								{this.state.suggestions.map((suggestion, key) =>
-									<DropdownItem key={key} onClick={() => this.addTag(suggestion.name)}>{suggestion.name}</DropdownItem>
-								)}
-							</Dropdown>
-						</Search>
-					</Input>
-
-					<input type="submit" value="Submit" />
-				</form>
-			</div>
+					<Dropdown>
+						{this.state.suggestions.map((suggestion, key) =>
+							<DropdownItem key={key} onClick={() => this.addTag(suggestion.name)}>
+								{suggestion.name}
+							</DropdownItem>
+						)}
+					</Dropdown>
+				</Search>
+			</Input>
 		)
 	}
 }

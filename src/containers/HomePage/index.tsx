@@ -17,20 +17,22 @@ const Button = styled.button`
 export default class Counter extends React.Component {
 	state = {
 		page: 1,
-		search: [],
+		tags: [],
 		items: []
 	}
 
 	/**
 	 * Retrieve the stackexchange data
 	 */
-	get = (search, page) => {
-		axios.get(`https://api.stackexchange.com/2.3/questions/unanswered?page=${page}&pagesize=25&order=desc&sort=activity&site=stackoverflow&tagged=${search.join(';')}`).then(res => {
+	get = (tags, page) => {
+		axios.get(`https://api.stackexchange.com/2.3/questions/unanswered?page=${page}&pagesize=25&order=desc&sort=activity&site=stackoverflow&tagged=${tags.join(';')}`).then(res => {
 			const { data } = res
 			
 			this.setState({ items: [...this.state.items, ...data.items] })
-		}).catch((res) => {
-			console.log("No!", res)
+		}).catch((error) => {
+			let { data } = error.response
+
+			alert(`Error: ${data.error_message}`)
 		})
 	}
 
@@ -38,27 +40,25 @@ export default class Counter extends React.Component {
 	 * Retrieve the previous page data
 	 */
 	previous = () => {
-		this.setState({ page: this.state.page + 1 })
-		this.handleSearch(this.state.search)
+		if ((this.state.page - 1) >= 1) {
+			this.handleSearch(this.state.tags, this.state.page - 1)
+		}
 	}
 
 	/**
 	 * Retrieve the next page data
 	 */
 	next = () => {
-		if ((this.state.page - 1) >= 1) {
-			this.setState({ page: this.state.page - 1 })
-			this.handleSearch(this.state.search)
-		}
+		this.handleSearch(this.state.tags, this.state.page + 1)
 	}
 
 	/**
 	 * Handle the search action
 	 */
-	handleSearch = (value) => {
-		this.state.search = value
-
-		this.get(this.state.search, this.state.page)
+	handleSearch = (tags, page = 1) => {
+		this.setState({ tags, page })
+		
+		this.get(tags, page)
 	}
 
 	/**
@@ -68,7 +68,7 @@ export default class Counter extends React.Component {
 		return (
 			<Container>
 				<Searchbar onSearchAction={this.handleSearch} />
-				
+
 				{this.state.items.length <= 0 ? false :
 					<div>
 						{this.state.items.map((entry, key) =>
