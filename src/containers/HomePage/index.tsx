@@ -2,25 +2,30 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
-import Container from '/src/components/Container'
+import Container from '../../components/Container'
 import Searchbar from './Searchbar'
 import Item from './Item'
 
-const Paragraph = styled.p`
-	/* ... */
+const SearchContainer = styled.div`
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 `;
 
 const Button = styled.button`
-	/* ... */
 `;
 
-export default class HomePage extends React.Component {
-	state = {
-		page: 1,
-		tags: [],
-		items: []
-	}
+interface IHomePageProps {
+}
 
+interface IHomePageState {
+	page?: number,
+	tags?: any[],
+	items?: any[]
+}
+
+export default class HomePage extends React.Component<IHomePageProps, IHomePageState> {
 	/**
 	 * Retrieve the stackexchange data
 	 */
@@ -76,18 +81,25 @@ export default class HomePage extends React.Component {
 	render() {
 		return (
 			<Container>
-				<Searchbar onSearchAction={this.handleClearSearch} />
+				<SearchContainer>
+					<h2 className="text-center py-5">StackOverflow <small>search</small></h2>
 
-				{this.state.items.length + 10 <= 0 ? false :
-					<div>
-						{this.state.items.map((entry, key) =>
-							<Item key={key} data={entry} />
-						)}
+					<Searchbar onSearchAction={this.handleClearSearch} />
 
-						<Paragraph>Showing {this.state.items.length} items</Paragraph>
-						<Button onClick={this.next}>Load more</Button>
-					</div>
-				}
+					{this.state.items.length <= 0 ? false :
+						<div>
+							{this.state.items.map((entry, key) =>
+								<Item key={key} data={entry} />
+							)}
+
+							<div className="d-flex py-3">
+								<p className="text-muted mr-auto">Showing {this.state.items.length} items</p>
+
+								<Button className="btn mr-auto" onClick={this.next}>Load more</Button>
+							</div>
+						</div>
+					}
+				</SearchContainer>
 			</Container>
 		)
 	}

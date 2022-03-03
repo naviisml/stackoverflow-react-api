@@ -3,66 +3,71 @@ import styled from 'styled-components'
 import axios from 'axios'
 
 const Input = styled.div`
-padding: 20px;
-border-radius: 5px;
-box-shadow: 0 3px 6px rgba(0, 0, 0, .06), 0 3px 6px rgba(0, 0, 0, .13);
-background-color: #FFFFFF;
-display: flex;
+	padding: 20px;
+	border-radius: 5px;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, .06), 0 3px 6px rgba(0, 0, 0, .13);
+	background-color: #FFFFFF;
+	display: flex;
 
-ul {
-	display: inline-block;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-
-	li {
+	ul {
 		display: inline-block;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		li {
+			display: inline-block;
+		}
 	}
-}`
+`
 
 const Search = styled.div`
-position: relative;
-display: flex;
-flex: 1;
-
-input {
-	border: none;
+	position: relative;
+	display: flex;
 	flex: 1;
-	margin: 5px;
-}`
+
+	input {
+		border: none;
+		flex: 1;
+		margin: 5px;
+	}
+`
 
 const Dropdown = styled.div`
-position: absolute;
-top: 100%;
-background-color: #FFFFFF;
-border: 1px solid #DCDCDC;
-border-radius: 5px;
-z-index: 1;`
+	position: absolute;
+	top: 100%;
+	background-color: #FFFFFF;
+	border: 1px solid #DCDCDC;
+	border-radius: 5px;
+	z-index: 1;
+`
 
 const DropdownItem = styled.div`
-display: block;
-padding: 12px;
-min-width: 150px;
-cursor: pointer;
+	display: block;
+	padding: 12px;
+	min-width: 150px;
+	cursor: pointer;
 
-&:hover {
-	background-color: #F7F7F7;
-}`
+	&:hover {
+		background-color: #F7F7F7;
+	}
+`
 
 const Close = styled.span`
-cursor: pointer;
-margin-left: 10px;`
+	cursor: pointer;
+	margin-left: 10px;
+`
 
-export default class Searchbar extends React.Component {
+export default class Searchbar extends React.Component<any, any> {
 	state = {
 		suggestions: [],
 		tags: [],
-		value: ''
+		value: '',
+		timeout: null,
 	}
 
-	// for development purposes
-	componentDidMount() {
-		this.setState({ tags: ['php', 'html'] })
+	props = {
+		onSearchAction: null,
 	}
 
 	/**
