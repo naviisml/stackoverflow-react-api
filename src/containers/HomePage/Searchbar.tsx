@@ -28,6 +28,7 @@ flex: 1;
 input {
 	border: none;
 	flex: 1;
+	margin: 5px;
 }`
 
 const Dropdown = styled.div`
@@ -57,6 +58,11 @@ export default class Searchbar extends React.Component {
 		suggestions: [],
 		tags: [],
 		value: ''
+	}
+
+	// for development purposes
+	componentDidMount() {
+		this.setState({ tags: ['php', 'html'] })
 	}
 
 	/**

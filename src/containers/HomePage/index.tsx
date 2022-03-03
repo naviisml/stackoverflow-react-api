@@ -2,9 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
-import Card from '/src/components/Card'
 import Container from '/src/components/Container'
 import Searchbar from './Searchbar'
+import Item from './Item'
 
 const Paragraph = styled.p`
 	/* ... */
@@ -14,7 +14,7 @@ const Button = styled.button`
 	/* ... */
 `;
 
-export default class Counter extends React.Component {
+export default class HomePage extends React.Component {
 	state = {
 		page: 1,
 		tags: [],
@@ -62,25 +62,26 @@ export default class Counter extends React.Component {
 	}
 
 	/**
+	 * Handle the search action
+	 */
+	handleClearSearch = (tags) => {
+		this.setState({ items: [], page: 1, tags })
+		
+		this.get(tags, 1)
+	}
+
+	/**
 	 * Render the template
 	 */
 	render() {
 		return (
 			<Container>
-				<Searchbar onSearchAction={this.handleSearch} />
+				<Searchbar onSearchAction={this.handleClearSearch} />
 
-				{this.state.items.length <= 0 ? false :
+				{this.state.items.length + 10 <= 0 ? false :
 					<div>
 						{this.state.items.map((entry, key) =>
-							// <Item key={key} data={entry} />
-							<Card key={key}>
-								{entry.title}
-								<ul>
-									{entry.tags.map((tag, key) =>
-										<li key={key}>{tag}</li>
-									)}
-								</ul>
-							</Card>
+							<Item key={key} data={entry} />
 						)}
 
 						<Paragraph>Showing {this.state.items.length} items</Paragraph>
