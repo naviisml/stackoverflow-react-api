@@ -4,6 +4,7 @@
 
 - Search for unanswered questions by tag
 - Auto-complete tags
+- 'Infinite loader'
 
 ## Installation
 
