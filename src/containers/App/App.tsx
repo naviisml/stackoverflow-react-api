@@ -20,6 +20,9 @@ import GlobalStyle from '/src/global-styles'
 const AppWrapper = styled.div``
 
 export default function App() {
+	/**
+	 * Render the template
+	 */
 	return (
 		<AppWrapper>
 			<Header />
