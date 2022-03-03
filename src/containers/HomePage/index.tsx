@@ -68,9 +68,11 @@ export default class Counter extends React.Component {
 		return (
 			<Container>
 				<Searchbar onSearchAction={this.handleSearch} />
+				
 				{this.state.items.length <= 0 ? false :
 					<div>
 						{this.state.items.map((entry, key) =>
+							// <Item key={key} data={entry} />
 							<Card key={key}>
 								{entry.title}
 								<ul>
