@@ -3,9 +3,10 @@ import styled from 'styled-components'
 import axios from 'axios'
 
 const Input = styled.div`
-padding: 12px;
-border-radius: 3px;
-border: 1px solid #DCDCDC;
+padding: 20px;
+border-radius: 5px;
+box-shadow: 0 3px 6px rgba(0, 0, 0, .06), 0 3px 6px rgba(0, 0, 0, .13);
+background-color: #FFFFFF;
 display: flex;
 
 ul {
@@ -49,12 +50,7 @@ cursor: pointer;
 
 const Close = styled.span`
 cursor: pointer;
-color: rgba(255, 255, 255, .5);
-margin-left: 10px;
-
-&:hover {
-	color: rgb(255, 255, 255);
-}`
+margin-left: 10px;`
 
 export default class Searchbar extends React.Component {
 	state = {
@@ -151,11 +147,11 @@ export default class Searchbar extends React.Component {
 			<Input>
 				<ul>
 					{this.state.tags.map((tag, key) =>
-						<li className="badge badge-primary badge-outline mr-2" key={key}>
+						<li className="badge mr-2" key={key}>
 							{tag}
 
 							<Close onClick={() => this.removeTag(tag)}>
-								x
+								✖
 							</Close>
 						</li>
 					)}

@@ -84,7 +84,6 @@ export default class Counter extends React.Component {
 						)}
 
 						<Paragraph>Showing {this.state.items.length} items</Paragraph>
-						<Paragraph>Page {this.state.page}</Paragraph>
 						<Button onClick={this.next}>Load more</Button>
 					</div>
 				}
