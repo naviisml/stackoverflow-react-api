@@ -64,10 +64,7 @@ export default class Searchbar extends React.Component<any, any> {
 		tags: [],
 		value: '',
 		timeout: null,
-	}
-
-	props = {
-		onSearchAction: null,
+		onSearchAction: false,
 	}
 
 	/**

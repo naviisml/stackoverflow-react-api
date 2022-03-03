@@ -16,16 +16,13 @@ const SearchContainer = styled.div`
 const Button = styled.button`
 `;
 
-interface IHomePageProps {
-}
+export default class HomePage extends React.Component<any, any> {
+	state = {
+		page: 1,
+		tags: [],
+		items: []
+	}
 
-interface IHomePageState {
-	page?: number,
-	tags?: any[],
-	items?: any[]
-}
-
-export default class HomePage extends React.Component<IHomePageProps, IHomePageState> {
 	/**
 	 * Retrieve the stackexchange data
 	 */

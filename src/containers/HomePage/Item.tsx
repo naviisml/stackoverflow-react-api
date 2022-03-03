@@ -12,7 +12,7 @@ const CardContent = styled.a`
 `
 
 export default class Item extends React.Component<any, any> {
-	props = {
+	state = {
 		data: {
 			title: null,
 			link: null,
