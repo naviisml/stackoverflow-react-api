@@ -36,7 +36,7 @@ export default class Searchbar extends React.Component {
 			} else {
 				this.setState({ suggestions: [] })
 			}
-		}, 2000)
+		}, 500)
 
 		this.setState({value: event.target.value})
 	}
