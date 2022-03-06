@@ -22,7 +22,7 @@ export default class HomePage extends React.Component<any, any> {
 		page: 1,
 		tags: [],
 		items: [],
-		quota_remaining: 0,
+		has_more: 0,
 	}
 
 	/**
@@ -43,8 +43,9 @@ export default class HomePage extends React.Component<any, any> {
 		await axios.get(`https://api.stackexchange.com/2.3/questions/unanswered?page=${page}&pagesize=25&order=desc&sort=activity&site=stackoverflow&tagged=${tags.join(';')}`).then(res => {
 			const { data } = res
 
+			console.log(data)
 			this.setState({ 
-				quota_remaining: data.quota_remaining,
+				has_more: data.has_more,
 				items: [...this.state.items, ...data.items],
 				busy: false
 			})
@@ -101,13 +102,13 @@ export default class HomePage extends React.Component<any, any> {
 
 					<Searchbar onSearchAction={this.handleClearSearch} />
 					
-					{(this.state.items.length > 0) &&
+					{(this.state.items.length <= 0) ? false :
 						<div>
 							{this.state.items.map((entry, key) =>
 								<Item key={key} data={entry} />
 							)}
 
-							{(this.state.quota_remaining > 0) &&
+							{(this.state.has_more != true) ? false :
 								<div className="d-flex justify-content-center py-3">
 									<Button className={this.state.busy ? "btn btn-soft btn-active btn-loading" : "btn btn-soft"} onClick={this.next}>Load more</Button>
 								</div>
