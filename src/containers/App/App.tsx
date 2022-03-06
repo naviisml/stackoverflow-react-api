@@ -10,12 +10,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { Routes, Route } from 'react-router-dom'
 
-import HomePage from '/src/containers/HomePage'
-import TopicPage from '/src/containers/TopicPage'
-import Header from '/src/components/Header'
-import Footer from '/src/components/Footer'
+import HomePage from '../../containers/HomePage'
 
-import GlobalStyle from '/src/global-styles'
+import GlobalStyle from '../../global-styles'
 
 const AppWrapper = styled.div``
 
@@ -25,12 +22,9 @@ export default function App() {
 	 */
 	return (
 		<AppWrapper>
-			<Header />
 			<Routes>
 				<Route path="/" element={<HomePage />} />
-      			<Route path="/topic/:id/:slug" element={<TopicPage />} />
 			</Routes>
-			<Footer />
 
 			<GlobalStyle />
 		</AppWrapper>

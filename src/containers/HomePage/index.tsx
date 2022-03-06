@@ -2,35 +2,39 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
-import Card from '/src/components/Card'
-import Container from '/src/components/Container'
+import Container from '../../components/Container'
 import Searchbar from './Searchbar'
+import Item from './Item'
 
-const Paragraph = styled.p`
-	/* ... */
+const SearchContainer = styled.div`
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 `;
 
 const Button = styled.button`
-	/* ... */
 `;
 
-export default class Counter extends React.Component {
+export default class HomePage extends React.Component<any, any> {
 	state = {
 		page: 1,
-		search: [],
+		tags: [],
 		items: []
 	}
 
 	/**
 	 * Retrieve the stackexchange data
 	 */
-	get = (search, page) => {
-		axios.get(`https://api.stackexchange.com/2.3/questions/unanswered?page=${page}&pagesize=25&order=desc&sort=activity&site=stackoverflow&tagged=${search.join(';')}`).then(res => {
+	get = (tags, page) => {
+		axios.get(`https://api.stackexchange.com/2.3/questions/unanswered?page=${page}&pagesize=25&order=desc&sort=activity&site=stackoverflow&tagged=${tags.join(';')}`).then(res => {
 			const { data } = res
 			
 			this.setState({ items: [...this.state.items, ...data.items] })
-		}).catch((res) => {
-			console.log("No!", res)
+		}).catch((error) => {
+			let { data } = error.response
+
+			alert(`Error: ${data.error_message}`)
 		})
 	}
 
@@ -38,27 +42,34 @@ export default class Counter extends React.Component {
 	 * Retrieve the previous page data
 	 */
 	previous = () => {
-		this.setState({ page: this.state.page + 1 })
-		this.handleSearch(this.state.search)
+		if ((this.state.page - 1) >= 1) {
+			this.handleSearch(this.state.tags, this.state.page - 1)
+		}
 	}
 
 	/**
 	 * Retrieve the next page data
 	 */
 	next = () => {
-		if ((this.state.page - 1) >= 1) {
-			this.setState({ page: this.state.page - 1 })
-			this.handleSearch(this.state.search)
-		}
+		this.handleSearch(this.state.tags, this.state.page + 1)
 	}
 
 	/**
 	 * Handle the search action
 	 */
-	handleSearch = (value) => {
-		this.state.search = value
+	handleSearch = (tags, page = 1) => {
+		this.setState({ tags, page })
+		
+		this.get(tags, page)
+	}
 
-		this.get(this.state.search, this.state.page)
+	/**
+	 * Handle the search action
+	 */
+	handleClearSearch = (tags) => {
+		this.setState({ items: [], page: 1, tags })
+		
+		this.get(tags, 1)
 	}
 
 	/**
@@ -67,25 +78,25 @@ export default class Counter extends React.Component {
 	render() {
 		return (
 			<Container>
-				<Searchbar onSearchAction={this.handleSearch} />
-				{this.state.items.length <= 0 ? false :
-					<div>
-						{this.state.items.map((entry, key) =>
-							<Card key={key}>
-								{entry.title}
-								<ul>
-									{entry.tags.map((tag, key) =>
-										<li key={key}>{tag}</li>
-									)}
-								</ul>
-							</Card>
-						)}
+				<SearchContainer>
+					<h2 className="text-center py-5">StackOverflow <small>search</small></h2>
 
-						<Paragraph>Showing {this.state.items.length} items</Paragraph>
-						<Paragraph>Page {this.state.page}</Paragraph>
-						<Button onClick={this.next}>Load more</Button>
-					</div>
-				}
+					<Searchbar onSearchAction={this.handleClearSearch} />
+
+					{this.state.items.length <= 0 ? false :
+						<div>
+							{this.state.items.map((entry, key) =>
+								<Item key={key} data={entry} />
+							)}
+
+							<div className="d-flex py-3">
+								<p className="text-muted mr-auto">Showing {this.state.items.length} items</p>
+
+								<Button className="btn mr-auto" onClick={this.next}>Load more</Button>
+							</div>
+						</div>
+					}
+				</SearchContainer>
 			</Container>
 		)
 	}
