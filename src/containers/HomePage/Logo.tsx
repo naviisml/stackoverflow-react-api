@@ -17,7 +17,7 @@ export default class Item extends React.Component<any, any> {
 	render() {
 		return (
 			<ImageContainer>
-				<Image src="/public/imaging/logo.png" />
+				<Image src="/imaging/logo.png" />
 			</ImageContainer>
 		)
 	}
