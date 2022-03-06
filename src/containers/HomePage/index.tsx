@@ -4,7 +4,9 @@ import axios from 'axios'
 
 import Container from '../../components/Container'
 import Searchbar from './Searchbar'
+import ItemList from './ItemList'
 import Item from './Item'
+import Logo from './Logo'
 
 const SearchContainer = styled.div`
 	min-height: 100vh;
@@ -98,12 +100,12 @@ export default class HomePage extends React.Component<any, any> {
 		return (
 			<Container>
 				<SearchContainer>
-					<h2 className="text-center py-5">StackOverflow <small>search</small></h2>
+					<Logo />
 
 					<Searchbar onSearchAction={this.handleClearSearch} />
 					
 					{(this.state.items.length <= 0) ? false :
-						<div>
+						<ItemList length={this.state.items.length}>
 							{this.state.items.map((entry, key) =>
 								<Item key={key} data={entry} />
 							)}
@@ -113,7 +115,7 @@ export default class HomePage extends React.Component<any, any> {
 									<Button className={this.state.busy ? "btn btn-soft btn-active btn-loading" : "btn btn-soft"} onClick={this.next}>Load more</Button>
 								</div>
 							}
-						</div>
+						</ItemList>
 					}
 				</SearchContainer>
 			</Container>
