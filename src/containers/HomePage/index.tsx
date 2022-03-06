@@ -21,7 +21,8 @@ export default class HomePage extends React.Component<any, any> {
 		busy: false,
 		page: 1,
 		tags: [],
-		items: []
+		items: [],
+		quota_remaining: 0,
 	}
 
 	/**
@@ -41,10 +42,9 @@ export default class HomePage extends React.Component<any, any> {
 		// attempt to search for the tags
 		await axios.get(`https://api.stackexchange.com/2.3/questions/unanswered?page=${page}&pagesize=25&order=desc&sort=activity&site=stackoverflow&tagged=${tags.join(';')}`).then(res => {
 			const { data } = res
-			
-			console.log(data)
 
 			this.setState({ 
+				quota_remaining: data.quota_remaining,
 				items: [...this.state.items, ...data.items],
 				busy: false
 			})
@@ -107,9 +107,11 @@ export default class HomePage extends React.Component<any, any> {
 								<Item key={key} data={entry} />
 							)}
 
-							<div className="d-flex justify-content-center py-3">
-								<Button className={this.state.busy ? "btn btn-soft btn-active btn-loading" : "btn btn-soft"} onClick={this.next}>Load more</Button>
-							</div>
+							{(this.state.quota_remaining > 0) &&
+								<div className="d-flex justify-content-center py-3">
+									<Button className={this.state.busy ? "btn btn-soft btn-active btn-loading" : "btn btn-soft"} onClick={this.next}>Load more</Button>
+								</div>
+							}
 						</div>
 					}
 				</SearchContainer>
