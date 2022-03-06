@@ -75,13 +75,13 @@ export default class Searchbar extends React.Component<any, any> {
 	handleKeyDown = (event) => {
 		let lastTag = this.state.tags[this.state.tags.length - 1]
 
-		// submit the tag if we press space
-		if ((event.keyCode ?? event.charCode) == 32 && this.state.value.length >= 2)
-			return true, this.handleChange(event)
-
 		// reset the timer for suggestions
 		if (this.state.suggestionTimer)
 			clearTimeout(this.state.suggestionTimer)
+
+		// submit the tag if we press space
+		if ((event.keyCode ?? event.charCode) == 32 && this.state.value.length >= 2)
+			return true, this.handleSubmit(event)
 		
 		// check if the backspace was pressed, and if the length of the input is 0
 		if ((event.keyCode ?? event.charCode) == 8 && this.state.value.length == 0) {
