@@ -22,7 +22,7 @@ export default class HomePage extends React.Component<any, any> {
 		page: 1,
 		tags: [],
 		items: [],
-		has_more: 0,
+		has_more: false,
 	}
 
 	/**

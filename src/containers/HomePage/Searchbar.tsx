@@ -80,8 +80,11 @@ export default class Searchbar extends React.Component<any, any> {
 			clearTimeout(this.state.suggestionTimer)
 
 		// submit the tag if we press space
-		if ((event.keyCode ?? event.charCode) == 32 && this.state.value.length >= 2)
-			return true, this.handleSubmit(event)
+		if ((event.keyCode ?? event.charCode) == 32 && this.state.value.length >= 2) {
+			this.handleSubmit(event)
+
+			return true
+		}
 		
 		// check if the backspace was pressed, and if the length of the input is 0
 		if ((event.keyCode ?? event.charCode) == 8 && this.state.value.length == 0) {
@@ -160,8 +163,11 @@ export default class Searchbar extends React.Component<any, any> {
 		event.preventDefault()
 		
 		// submit the tag if we press space
-		if (tag.length == 0)
-			return false, console.warn('Invalid input')
+		if (tag.length == 0) {
+			console.warn('Invalid input')
+			
+			return false
+		}
 
 		// add a tag
 		this.addTag(tag)
