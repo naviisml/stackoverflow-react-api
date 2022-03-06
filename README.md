@@ -1,10 +1,15 @@
 # StackOverflow Search
 
+This project contais a React application using the StackOveflow API that displays unanswered questions for 1 or more tags.
+
 ## Features
 
 - Search for unanswered questions by tag
+    - Press 'Enter', or 'Space' to add the tag
+    - Press 'Escape' to select, and again to remove the last added tag
 - Auto-complete tags
-- 'Infinite loader'
+- Search on multiple tags
+- Infinite loader
 
 ## Installation
 
