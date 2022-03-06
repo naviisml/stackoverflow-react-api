@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { sassFalse } from 'sass'
 
 const Input = styled.div`
 	padding: 20px;
@@ -74,13 +75,16 @@ export default class Searchbar extends React.Component<any, any> {
 	handleKeyDown = (event) => {
 		let lastTag = this.state.tags[this.state.tags.length - 1]
 
+		// submit the tag if we press space
+		if ((event.keyCode ?? event.charCode) == 32 && this.state.value.length >= 2)
+			return true, this.handleChange(event)
+
 		// reset the timer for suggestions
 		if (this.state.suggestionTimer)
 			clearTimeout(this.state.suggestionTimer)
 		
-				
 		// check if the backspace was pressed, and if the length of the input is 0
-		if ((event.keyCode ?? event.charCode) == 8 && event.target.value.length == 0) {
+		if ((event.keyCode ?? event.charCode) == 8 && this.state.value.length == 0) {
 			// check if the selectedTag was selected, and if the backspace was
 			// pressed again, if true; remove the last tag from the list, and reset
 			// the selected tag
@@ -91,7 +95,7 @@ export default class Searchbar extends React.Component<any, any> {
 				// reset the selectedTag
 				this.setSelectedTag(-1)
 
-				// search on the new tagList
+				// search on the new tags
 				this.props.onSearchAction(this.state.tags)
 			}
 
@@ -112,28 +116,36 @@ export default class Searchbar extends React.Component<any, any> {
 	 */
 	handleChange = (event) => {
 		let tag = event.target.value
-		
+
+		// reset the timer for suggestions
+		if (this.state.suggestionTimer)
+			clearTimeout(this.state.suggestionTimer)
+
 		// set a timeout, so when a key gets pressed within .5
 		// seconds of each-other, the timer will be reset.
 		this.state.suggestionTimer = setTimeout(() => {
-			// Make sure the search contains atleast 2 characters
-			if ([...tag].length >= 2) {
-				// Retrieve the tags from the API
-				axios.get(`https://api.stackexchange.com/2.3/tags?pagesize=5&order=desc&sort=popular&inname=${tag}&site=stackoverflow`).then(res => {
-					const { data } = res
-					
-					this.setState({ suggestions: data.items })
-				}).catch((error) => {
-					let { data } = error.response
-
-					this.setState({ suggestions: [] })
-
-					// oopsie, we have hit a api limit!
-					alert(`Error: ${data.error_message}`)
-				})
-			} else {
+			// submit the tag if we press space
+			if (!tag || tag.replace(/\s/g, "").length == 0) {
+				console.warn('Invalid input')
 				this.setState({ suggestions: [] })
+
+				return false
 			}
+			
+			// attempt to search for the tags
+			axios.get(`https://api.stackexchange.com/2.3/tags?pagesize=5&order=desc&sort=popular&inname=${tag}&site=stackoverflow`).then(res => {
+				const { data } = res
+				
+				this.setState({ suggestions: data.items })
+			}).catch((error) => {
+				let { data } = error.response
+
+				this.setState({ suggestions: [] })
+
+				// oopsie, we have hit a api limit!
+				alert(`Error: ${data.error_message}`)
+				console.warn(data.error_message)
+			})
 		}, 500)
 
 		this.setState({value: event.target.value})
@@ -143,10 +155,16 @@ export default class Searchbar extends React.Component<any, any> {
 	 * Handle the form submit event
 	 */
 	handleSubmit = (event) => {
+		let tag = this.state.value.replace(/\s/g, "")
+
 		event.preventDefault()
-	
+		
+		// submit the tag if we press space
+		if (tag.length == 0)
+			return false, console.warn('Invalid input')
+
 		// add a tag
-		this.addTag(this.state.value)
+		this.addTag(tag)
 	}
 
 	/**
@@ -203,7 +221,7 @@ export default class Searchbar extends React.Component<any, any> {
 			<Input>
 				<ul>
 					{this.state.tags.map((tag, key) =>
-						<li key={key} className={(key == this.state.selectedTag) ? 'badge badge-primary mr-2' : 'badge mr-2'}>
+						<li key={key} className={(key == this.state.selectedTag) ? 'badge badge-muted mr-2' : 'badge mr-2'}>
 							{tag}
 
 							<Close onClick={() => this.removeTag(tag)}>
