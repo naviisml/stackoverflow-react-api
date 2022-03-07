@@ -79,7 +79,9 @@ export default class Searchbar extends React.Component<any, any> {
 	 * Handle the onBlur function
 	 */
 	onBlur = () => {
-		this.setState({focus: false})
+		setTimeout(() => {
+			this.setState({focus: false})
+		}, 100)
 	}
 
 	/**
