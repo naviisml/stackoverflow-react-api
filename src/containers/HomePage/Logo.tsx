@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 const ImageContainer = styled.div`
 	width: 350px;
+	max-width: 100%;
 	margin: 50px auto;
 `
 

@@ -8,7 +8,6 @@ const Input = styled.div`
 	border-radius: 5px;
 	box-shadow: 0 3px 6px rgba(0, 0, 0, .06), 0 3px 6px rgba(0, 0, 0, .13);
 	background-color: #FFFFFF;
-	display: flex;
 
 	ul {
 		display: inline-block;
@@ -24,7 +23,6 @@ const Input = styled.div`
 
 const Search = styled.div`
 	position: relative;
-	display: flex;
 	flex: 1;
 
 	input {
@@ -67,6 +65,21 @@ export default class Searchbar extends React.Component<any, any> {
 		selectedTag: -1,
 		tags: [],
 		value: '',
+		focus: false,
+	}
+
+	/**
+	 * Handle the onFocus function
+	 */
+	onFocus = () => {
+		this.setState({focus: true})
+	}
+
+	/**
+	 * Handle the onBlur function
+	 */
+	onBlur = () => {
+		this.setState({focus: false})
 	}
 
 	/**
@@ -118,7 +131,7 @@ export default class Searchbar extends React.Component<any, any> {
 	 * Handle the form onChange data
 	 */
 	handleChange = (event) => {
-		let tag = event.target.value
+		let tag = event.target.value.replace(/[^a-zA-Z0-9]/gi, '')
 
 		// reset the timer for suggestions
 		if (this.state.suggestionTimer)
@@ -225,9 +238,9 @@ export default class Searchbar extends React.Component<any, any> {
 	render() {
 		return (
 			<Input>
-				<ul>
+				<ul className="d-xs-block d-md-flex">
 					{this.state.tags.map((tag, key) =>
-						<li key={key} className={(key == this.state.selectedTag) ? 'badge badge-muted mr-2' : 'badge mr-2'}>
+						<li key={key} className={(key == this.state.selectedTag) ? 'badge badge-muted mr-2 mb-2' : 'badge mr-2'}>
 							{tag}
 
 							<Close onClick={() => this.removeTag(tag)}>
@@ -237,12 +250,12 @@ export default class Searchbar extends React.Component<any, any> {
 					)}
 				</ul>
 
-				<Search>
+				<Search className="d-xs-block d-md-flex">
 					<form onSubmit={this.handleSubmit}>
-						<input type="text" placeholder="Search for a tag..." value={this.state.value} onKeyDown={this.handleKeyDown} onChange={this.handleChange} />
+						<input type="text" placeholder="Search for a tag..." value={this.state.value} onKeyDown={this.handleKeyDown} onChange={this.handleChange} onBlur={this.onBlur} onFocus={this.onFocus} />
 					</form>
 
-					<Dropdown>
+					<Dropdown className={this.state.focus ? 'd-block' : 'd-none'}>
 						{this.state.suggestions.map((suggestion, key) =>
 							<DropdownItem key={key} onClick={() => this.addTag(suggestion.name)}>
 								{suggestion.name}
