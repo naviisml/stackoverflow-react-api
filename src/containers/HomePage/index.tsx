@@ -112,7 +112,7 @@ export default class HomePage extends React.Component<any, any> {
 
 							{(this.state.has_more != true) ? false :
 								<div className="d-flex justify-content-center py-3">
-									<Button className={this.state.busy ? "btn btn-active btn-loading" : "btn"} onClick={this.next}>Load more</Button>
+									<Button className={this.state.busy ? "btn btn-active btn-loading" : "btn"} onClick={this.next}>Load more <i className="fas fa-long-arrow-right"></i></Button>
 								</div>
 							}
 						</ItemList>
