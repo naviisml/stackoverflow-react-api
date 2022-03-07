@@ -34,6 +34,7 @@ const Search = styled.div`
 		border: none;
 		flex: 1;
 		margin: 5px;
+		max-width: 100%;
 	}
 `
 
