@@ -8,6 +8,11 @@ const Input = styled.div`
 	border-radius: 5px;
 	box-shadow: 0 3px 6px rgba(0, 0, 0, .06), 0 3px 6px rgba(0, 0, 0, .13);
 	background-color: #FFFFFF;
+	display: flex;
+
+	@media (max-width: 768px) {
+		display: block;
+	}
 
 	ul {
 		display: inline-block;
@@ -254,6 +259,7 @@ export default class Searchbar extends React.Component<any, any> {
 
 				<Search className="d-xs-block d-md-flex">
 					<form onSubmit={this.handleSubmit}>
+						<i className="fas fa-search d-inline-block text-muted"></i>
 						<input type="text" placeholder="Search for a tag..." value={this.state.value} onKeyDown={this.handleKeyDown} onChange={this.handleChange} onBlur={this.onBlur} onFocus={this.onFocus} />
 					</form>
 
